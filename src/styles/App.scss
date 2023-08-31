@@ -1,0 +1,47 @@
+@import 'custom';
+
+.breadcrumb-item {
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  a {
+    color: $secondary;
+    text-decoration: none;
+  }
+  &.active {
+    color: $primary-orange;
+  }
+}
+
+.btn-primary {
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn-secondary {
+  background-color: #f9f9fb;
+  color: #8c929b;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #e2e5eb;
+  height: 48px;
+
+  &.active,
+  &:hover {
+    color: $primary-orange;
+    background-color: $white;
+    border: 1px solid #e2e5eb;
+  }
+}
+
+.form-label {
+  color: $text-black-800;
+  font-family: TBC Sailec;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

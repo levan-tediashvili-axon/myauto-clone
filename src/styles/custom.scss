@@ -1,0 +1,39 @@
+// Override default variables before the import
+$body-bg: #f2f3f6;
+$primary-orange: #fd4100;
+$secondary: #6f7383;
+$secondary-gray-100: #c2c9d8;
+$text-black-800: #272a37;
+$gray-520: #8c929b;
+
+$theme-colors: (
+  'primary': $primary-orange,
+  'secondary': $secondary,
+  'secondaryViolet': #4a6cfa,
+  'info': tomato,
+  'danger': teal,
+);
+
+// BREADCRUMBS
+$breadcrumb-divider: url('data:image/svg+xml,<svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path id="Vector 1" d="M1.2038 1L4.2038 4L1.2038 7" stroke="%236F7383" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+
+$breadcrumb-font-size: 12px;
+
+// BUTTON
+$btn-border-radius: 6px;
+$btn-link-color: #ffffff;
+$btn-font-weight: 700;
+
+// INPUTS
+$input-padding-y: 12px;
+$input-padding-x: 12px;
+$input-color: #1b1d25;
+$input-bg: #fff;
+$input-border-color: $secondary-gray-100;
+$input-focus-border-color: $gray-520;
+
+$form-select-border-radius: 8px;
+$form-select-focus-box-shadow: none;
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
