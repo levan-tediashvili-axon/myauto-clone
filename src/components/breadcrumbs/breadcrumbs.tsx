@@ -13,7 +13,7 @@ type Props = {
 }
 export const Breadcrumbs = ({ items }: Props) => {
   return (
-    <Breadcrumb>
+    <Breadcrumb className="mt-32px mb-20px">
       {items.map((item) => (
         <Breadcrumb.Item key={item.id} href={item.href} active={item.active}>
           {item.name}

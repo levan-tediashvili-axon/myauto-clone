@@ -1,0 +1,33 @@
+.equal-width-buttons .btn {
+  width: 33%;
+  padding: 0;
+  min-width: fit-content;
+}
+
+.w-250px {
+  width: 250px;
+}
+.px-24px {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.pt-22px {
+  padding-top: 22px;
+}
+
+.mt-32px {
+  margin-top: 32px;
+}
+
+.mb-20px {
+  margin-bottom: 20px;
+}
+
+.shadow-1 {
+  box-shadow: 0px 2px 16px 0px rgba(39, 42, 55, 0.13);
+}
+
+.shadow-2 {
+  box-shadow: 0px 4px 16px 0px rgba(164, 174, 193, 0.1);
+}

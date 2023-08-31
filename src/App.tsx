@@ -14,7 +14,7 @@ function App() {
     <div>
       <Header />
       <Container>
-        <Stack className="mt-3">
+        <Stack>
           <Breadcrumbs items={breadcrumbItems} />
           <ProductsList />
         </Stack>

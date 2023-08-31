@@ -1,5 +1,9 @@
-@import 'custom';
+@import 'variables';
+@import 'custom-classes';
 
+.breadcrumb {
+  margin: 0;
+}
 .breadcrumb-item {
   font-style: normal;
   font-weight: 400;
@@ -34,6 +38,18 @@
     color: $primary-orange;
     background-color: $white;
     border: 1px solid #e2e5eb;
+    border-bottom: 1px solid $primary-orange;
+    svg {
+      path {
+        fill: $primary-orange;
+      }
+    }
+  }
+
+  svg {
+    path {
+      fill: #8c929b;
+    }
   }
 }
 
