@@ -3,7 +3,7 @@ import React from 'react'
 export const Logo = () => {
   return (
     <svg width="161" height="46" viewBox="0 0 161 46" fill="none">
-      <g id="Asset 1 1" clip-path="url(#clip0_1_783)">
+      <g id="Asset 1 1" clipPath="url(#clip0_1_783)">
         <g id="Layer 2">
           <g id="Layer 1">
             <path

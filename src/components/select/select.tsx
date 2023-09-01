@@ -1,23 +1,67 @@
-import React from 'react'
-import { Form } from 'react-bootstrap'
+import { Dropdown, Form } from 'react-bootstrap'
 
-type Props = {
-  controlId: string
-  options: Array<string>
+type Props<T> = {
+  options: Array<T>
   label: string
-  multiSelect?: boolean
   placeholder?: string
+  renderOption: (option: T) => string
+  value: Array<T>
+  onChange: (input: {
+    option: T
+    isChecked: boolean
+    checkedIndex: number
+  }) => void
+  identifier: string
 }
 
-export const Select = ({ controlId, options, label, placeholder }: Props) => {
+// https://react-bootstrap.netlify.app/docs/components/overlays
+
+export const Select = <T,>({
+  options,
+  placeholder,
+  renderOption,
+  value,
+  onChange,
+  identifier,
+}: Props<T>) => {
+  const getCheckedBoolean = (option: T) => {
+    return value.some(
+      (elem) => elem[identifier as keyof T] === option[identifier as keyof T],
+    )
+  }
+  const getCheckedIndex = (option: T) => {
+    return value.findIndex(
+      (elem) => elem[identifier as keyof T] === option[identifier as keyof T],
+    )
+  }
+
   return (
-    <Form.Group controlId={controlId}>
-      <Form.Label className="mb-2 text-gray-800">{label}</Form.Label>
-      <Form.Select placeholder={placeholder}>
-        {options.map((option) => (
-          <option>{option}</option>
-        ))}
-      </Form.Select>
-    </Form.Group>
+    <Dropdown autoClose="outside">
+      <Dropdown.Toggle variant="success" id="dropdown-basic">
+        {value.map((option) => renderOption(option)).join(', ') || placeholder}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu style={{ maxHeight: '500px', overflowY: 'scroll' }}>
+        {options.map((option) => {
+          const isChecked = getCheckedBoolean(option)
+          const checkedIndex = getCheckedIndex(option)
+          return (
+            <Dropdown.Item
+              key={option[identifier as keyof T] as string}
+              onClick={(e) => {
+                onChange({ option, isChecked, checkedIndex })
+              }}
+            >
+              <Form.Check
+                onChange={() => null}
+                type="checkbox"
+                label={renderOption(option)}
+                checked={isChecked}
+              />
+            </Dropdown.Item>
+          )
+        })}
+      </Dropdown.Menu>
+    </Dropdown>
   )
 }
