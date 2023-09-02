@@ -16,8 +16,6 @@ type Props<T> = {
   identifier: string
 }
 
-// https://react-bootstrap.netlify.app/docs/components/overlays
-
 export const Select = <T,>({
   options,
   placeholder,
@@ -69,7 +67,6 @@ export const Select = <T,>({
             overflowX: 'hidden',
           }}
         >
-          <Dropdown.Divider></Dropdown.Divider>
           {options.map((option) => {
             const isChecked = getCheckedBoolean(option)
             const checkedIndex = getCheckedIndex(option)

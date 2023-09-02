@@ -1,70 +1,80 @@
-import { useQueries, useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Button, ButtonGroup, Form, Stack } from 'react-bootstrap'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
-import { IManufacturer, getManufacturerModels, getManufacturers } from 'src/api'
-import { BikeIcon, CarIcon, DashIcon, TractorIcon } from 'src/assets'
+import { IManufacturer, getManufacturers } from 'src/api'
 import { Select } from 'src/components'
+import { BikeIcon, CarIcon, DashIcon, TractorIcon } from 'src/assets'
+import { getCategories } from 'src/api/categories/categories.api'
+import { filterCategories } from 'src/utils/filter-categories'
+import { filterManufacturers } from 'src/utils/filter-manufacturers'
+import { ICategory } from 'src/api/categories/categories.codecs'
+
+type ICurrency = {
+  label: 'GEL' | 'USD'
+  id: 3 | 1
+}
 
 export type FilterInputs = {
+  vehicleType: 0 | 1 | 2
   manufacturers: Array<IManufacturer>
+  categories: Array<ICategory>
+  currency: ICurrency
+  priceFrom: string
+  priceTo: string
+}
+
+const defaultValues: FilterInputs = {
+  vehicleType: 0,
+  manufacturers: [],
+  categories: [],
+  currency: { label: 'GEL', id: 3 },
+  priceFrom: '',
+  priceTo: '',
 }
 
 export const FilterForm = () => {
-  const { handleSubmit, control, setValue } = useForm<FilterInputs>()
+  const { handleSubmit, control, setValue, watch } = useForm<FilterInputs>({
+    defaultValues,
+  })
 
   const manufacturersField = useFieldArray({
     control,
     name: 'manufacturers',
   })
 
-  const [vehicleType, setVehicleType] = useState(0)
-
-  const selectedManufacturerIds = manufacturersField.fields.map(
-    (man) => man.man_id,
-  )
-
-  const modelsQueries = selectedManufacturerIds.map((manufacturerId) => {
-    return {
-      queryKey: ['models', manufacturerId],
-      queryFn: () =>
-        getManufacturerModels({
-          manufacturerId,
-        }),
-      staleTime: Infinity,
-    }
+  const categoriesField = useFieldArray({
+    control,
+    name: 'categories',
   })
+  const vehicleType = watch('vehicleType')
 
   const $manufacturers = useQuery({
     queryKey: ['manufacturers'],
     queryFn: () => getManufacturers(),
   })
-
-  const $models = useQueries({ queries: modelsQueries })
+  const $categories = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  })
 
   const vehicleTypes = [
     { value: 0, Icon: CarIcon },
     { value: 1, Icon: TractorIcon },
     { value: 2, Icon: BikeIcon },
-  ]
+  ] as const
 
-  if ($manufacturers.data === undefined) {
+  if ($manufacturers.data === undefined || $categories.data === undefined) {
     return null
   }
   const manufacturers = $manufacturers.data
-  const models = $models.map((response) => {
-    if (response?.data === undefined) {
-      return null
-    }
+  const categories = $categories.data
 
-    const manufacturerId = response.data[0]?.man_id || null
-    const manufacturer = manufacturers.find(
-      (man) => Number(man.man_id) === Number(manufacturerId),
-    )
-    return { manufacturer, models: response.data }
+  const filteredCategories = filterCategories({ categories, vehicleType })
+  const filteredManufacturers = filterManufacturers({
+    manufacturers,
+    vehicleType,
   })
-
-  console.log(models)
 
   return (
     <Form
@@ -79,7 +89,13 @@ export const FilterForm = () => {
           <Button
             key={value}
             variant="secondary"
-            onClick={() => setVehicleType(value)}
+            onClick={() => {
+              if (value !== vehicleType) {
+                setValue('manufacturers', [])
+                setValue('categories', [])
+              }
+              setValue('vehicleType', value)
+            }}
             className={vehicleType === value ? 'active' : undefined}
           >
             <Icon />
@@ -87,6 +103,7 @@ export const FilterForm = () => {
         ))}
       </ButtonGroup>
       <Stack className="pb-4 px-24px pt-22px bg-white border-bottom border-end border-start border-solid-1 border-gray-200">
+        {/* TODO. Do we need <Controller/> at all? */}
         <Controller
           control={control}
           name="manufacturers"
@@ -94,7 +111,7 @@ export const FilterForm = () => {
             <Select
               label="მწარმოებელი"
               identifier="man_id"
-              options={manufacturers}
+              options={filteredManufacturers}
               placeholder="ყველა მწარმოებელი"
               renderOption={(option) => option.man_name}
               value={manufacturersField.fields}
@@ -109,6 +126,23 @@ export const FilterForm = () => {
             />
           )}
         />
+
+        <Select
+          label="კატეგორია"
+          identifier="category_id"
+          options={filteredCategories}
+          placeholder="ყველა კატეგორია"
+          renderOption={(option) => option.title}
+          value={categoriesField.fields}
+          onChange={({ option, isChecked, checkedIndex }) => {
+            if (isChecked) {
+              categoriesField.remove(checkedIndex)
+            } else {
+              categoriesField.append(option)
+            }
+          }}
+          onClear={() => setValue('categories', [])}
+        />
       </Stack>
       <Stack
         className="pt-3 px-24px bg-white border-bottom border-end border-start border-solid-1 border-gray-200"
@@ -120,9 +154,21 @@ export const FilterForm = () => {
           <p>switch</p>
         </Stack>
         <Stack direction="horizontal" gap={1}>
-          <Form.Control type="number" placeholder="დან" />
+          <Controller
+            name="priceFrom"
+            control={control}
+            render={({ field }) => (
+              <Form.Control {...field} placeholder="დან" />
+            )}
+          />
           <DashIcon />
-          <Form.Control type="number" placeholder="მდე" />
+          <Controller
+            name="priceTo"
+            control={control}
+            render={({ field }) => (
+              <Form.Control {...field} placeholder="მდე" />
+            )}
+          />
         </Stack>
       </Stack>
       <Stack className="pt-3 px-24px pb-3 bg-white shadow-1 border-bottom border-end border-start border-solid-1 border-gray-200">
