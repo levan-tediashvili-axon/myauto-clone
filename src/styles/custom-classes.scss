@@ -4,8 +4,55 @@
   min-width: fit-content;
 }
 
+.form-check {
+  .form-check-input {
+    cursor: pointer;
+    &:checked {
+      background-color: #1aba6b;
+      border-color: transparent;
+      outline: none;
+      border: none;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &:checked + .form-check-label {
+      color: #272a37;
+    }
+  }
+  .form-check-label {
+    color: #6f7383;
+    cursor: pointer;
+  }
+}
+
+.dropdown {
+  button {
+    font-weight: 400;
+    padding: 12px 8px 12px 12px;
+  }
+  .dropdown-item {
+    &:active {
+      background-color: rgba(0, 0, 0, 0);
+    }
+  }
+}
+
+// WIDTHS and HEIGHTS
 .w-250px {
   width: 250px;
+}
+
+.h-28px {
+  height: 28px;
+}
+
+// PADDINGS
+.px-8px {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 .px-24px {
   padding-left: 24px;
@@ -16,6 +63,7 @@
   padding-top: 22px;
 }
 
+// MARGINS
 .mt-32px {
   margin-top: 32px;
 }
@@ -24,10 +72,56 @@
   margin-bottom: 20px;
 }
 
+// SHADOWS
 .shadow-1 {
   box-shadow: 0px 2px 16px 0px rgba(39, 42, 55, 0.13);
 }
 
 .shadow-2 {
   box-shadow: 0px 4px 16px 0px rgba(164, 174, 193, 0.1);
+}
+
+// BORDERS
+.border-radius-6 {
+  border-radius: 6px;
+}
+
+// FONTS & TEXTS
+
+.fw-400 {
+  font-weight: 400;
+}
+.font-size-12 {
+  font-size: 12px;
+}
+
+.font-size-13 {
+  font-size: 13px;
+}
+
+.text-gray-850 {
+  color: $gray-850;
+}
+
+.hover-text-gray-800 {
+  &:hover {
+    color: $gray-800;
+  }
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.text-overflow-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.text-left {
+  text-align: left;
+}
+
+// OTHER
+.cursor-pointer {
+  cursor: pointer;
 }

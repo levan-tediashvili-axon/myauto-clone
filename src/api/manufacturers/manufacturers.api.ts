@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IManufacturer } from './manufacturers.codecs'
+import { IManufacturer, IModel } from './manufacturers.codecs'
 
 export const getManufacturers = async () => {
   const url = 'https://static.my.ge/myauto/js/mans.json'
@@ -24,5 +24,6 @@ export const getManufacturerModels = async ({
   const result = await axios.get(url)
   const data = result.data
 
-  return data
+  // TODO. Decode and validate json instead of returning as IModel
+  return data.data as Array<IModel>
 }
