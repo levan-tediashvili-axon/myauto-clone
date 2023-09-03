@@ -57,7 +57,11 @@ export const ProductsList = () => {
         <FilterForm manufacturers={manufacturers} categories={categories} />
         <Stack gap={3}>
           <SortOptions total={products.meta.total} />
-          <Stack className="gap-10px">
+          <Stack
+            className={`gap-10px ${
+              $products.isPreviousData ? 'opacity-05' : ''
+            }`}
+          >
             {products.items.map((product) => {
               const manufacturer = manufacturers.find(
                 (man) => Number(man.man_id) === product.man_id,

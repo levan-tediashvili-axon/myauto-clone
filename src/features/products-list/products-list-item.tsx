@@ -4,6 +4,8 @@ import { IManufacturer } from 'src/api'
 import { IProduct } from 'src/api/products/products.codecs'
 import { EngineIcon, GearboxIcon, OdometerIcon, SteeringIcon } from 'src/assets'
 import { CustomsBadge } from 'src/components'
+import { getFuelType } from 'src/utils/get-fuel-type'
+import { getLocation } from 'src/utils/get-location'
 type Props = {
   product: IProduct
   manufacturer?: IManufacturer
@@ -32,12 +34,15 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
         <Stack>
           <Stack direction="horizontal" className="justify-content-between">
             <Stack gap={2} direction="horizontal">
+              {product.for_rent && <p className="m-0">ქირავდება</p>}
               <p className="text-black-800 fw-500 m-0">{cardTitle}</p>
-              <p className="m-0">2013 წ</p>
+              <p className="m-0">{`${product.prod_year} წ`}</p>
             </Stack>
             <Stack gap={3} direction="horizontal">
               <CustomsBadge customsPassed={product.customs_passed} />
-              <p className="m-0 font-size-12 text-secondary">თბილისი</p>
+              <p className="m-0 font-size-12 text-secondary">
+                {getLocation(product.location_id)}
+              </p>
             </Stack>
           </Stack>
           <Stack direction="horizontal">
@@ -49,7 +54,9 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
                     className="align-items-center gap-12px"
                   >
                     <EngineIcon />
-                    <p className="m-0 font-size-12 text-black">ჰიბრიდი</p>
+                    <p className="m-0 font-size-12 text-black">{`${(
+                      product.engine_volume / 1000
+                    ).toFixed(1)} ${getFuelType(product.fuel_type_id)}`}</p>
                   </Stack>
                 </Col>
                 <Col>
@@ -58,7 +65,9 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
                     className="align-items-center gap-12px"
                   >
                     <OdometerIcon />
-                    <p className="m-0 font-size-12 text-black">200 000 კმ</p>
+                    <p className="m-0 font-size-12 text-black">
+                      {product.car_run_km} კმ
+                    </p>
                   </Stack>
                 </Col>
               </Row>
@@ -78,13 +87,15 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
                     className="align-items-center gap-12px"
                   >
                     <SteeringIcon />
-                    <p className="m-0 font-size-12 text-black">მარცხენა</p>
+                    <p className="m-0 font-size-12 text-black">
+                      {product.right_wheel ? 'მარჯვენა' : 'მარცხენა'}
+                    </p>
                   </Stack>
                 </Col>
               </Row>
             </Container>
             <Stack>
-              <p>76500</p>
+              <p>{product.price_usd}</p>
             </Stack>
           </Stack>
         </Stack>

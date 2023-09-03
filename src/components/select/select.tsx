@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Dropdown, Stack } from 'react-bootstrap'
 
 type Props<T> = {
@@ -24,12 +23,6 @@ export const Select = <T,>({
   identifier,
   classNames,
 }: Props<T>) => {
-  const [show, setShow] = useState(false)
-
-  const toggleDropdown = () => {
-    setShow(!show)
-  }
-
   const getCheckedBoolean = (option: T) => {
     if (value === null || value === undefined) {
       return false
@@ -64,7 +57,7 @@ export const Select = <T,>({
         )}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu className="w-100 mw-100 bg-white font-size-13" show={show}>
+      <Dropdown.Menu className="w-100 mw-100 bg-white font-size-13">
         <Stack
           style={{
             maxHeight: '500px',
