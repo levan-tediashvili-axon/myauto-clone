@@ -2,41 +2,77 @@ import { useQuery } from '@tanstack/react-query'
 import { Stack } from 'react-bootstrap'
 import { FilterForm } from './filter-form'
 import { getProducts } from 'src/api/products/products.api'
+import { Layout } from 'src/components/layout/layout'
+import { useLocation } from 'react-router-dom'
+import { ProductsListItem } from './products-list-item'
+import { getManufacturers } from 'src/api'
+import { getCategories } from 'src/api/categories/categories.api'
+import { SortOptions } from './sort-options'
+
+const breadcrumbItems = [
+  { id: '1', name: 'მთავარი', href: '/' },
+  { id: '2', name: 'ძიება', active: true },
+]
 
 export const ProductsList = () => {
-  const args = {
-    forRent: '0' as const,
-    mans: [],
-    cats: ['2', '3'],
-    priceFrom: '5000',
-    priceTo: '10000',
-    period: null,
-    setOrder: '1' as const,
-    page: 2,
-    currencyId: '1',
-  }
-  const $products = useQuery({
-    queryKey: ['products'],
-    queryFn: () => getProducts(args),
+  const location = useLocation()
+
+  const $manufacturers = useQuery({
+    queryKey: ['manufacturers'],
+    queryFn: getManufacturers,
+    refetchOnWindowFocus: false,
+  })
+  const $categories = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+    refetchOnWindowFocus: false,
   })
 
-  if ($products.data === undefined) {
+  const queryString = location.search.slice(1) // TODO. Validate query string before passing it to API
+
+  const $products = useQuery({
+    queryKey: ['products', queryString],
+    queryFn: () => getProducts(queryString),
+    keepPreviousData: true,
+  })
+
+  if (
+    $products.data === undefined ||
+    $manufacturers.data === undefined ||
+    $categories.data === undefined
+  ) {
     return null
   }
 
+  const manufacturers = $manufacturers.data
+  const categories = $categories.data
   const products = $products.data
+
   return (
-    <Stack direction="horizontal">
-      <FilterForm />
-      <Stack>
-        {products.items.map((item) => (
-          <Stack direction="horizontal" gap={2}>
-            <p>{item.car_run_km}</p>
-            <p>{item.price}</p>
-            <p>{item.price_usd}</p>
+    <Layout breadcrumbItems={breadcrumbItems}>
+      <Stack
+        direction="horizontal"
+        className="position-relative align-items-start gap-20px"
+      >
+        <FilterForm manufacturers={manufacturers} categories={categories} />
+        <Stack gap={3}>
+          <SortOptions total={products.meta.total} />
+          <Stack className="gap-10px">
+            {products.items.map((product) => {
+              const manufacturer = manufacturers.find(
+                (man) => Number(man.man_id) === product.man_id,
+              )
+              return (
+                <ProductsListItem
+                  key={product.car_id}
+                  product={product}
+                  manufacturer={manufacturer}
+                />
+              )
+            })}
           </Stack>
-        ))}
+        </Stack>
       </Stack>
-    </Stack>
+    </Layout>
   )
 }

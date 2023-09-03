@@ -9,4 +9,9 @@ export type IProduct = {
   car_run: number
   car_run_dim: number // km===1 miles===?
   car_run_km: number
+  for_rent: boolean
+  photo: string
+  car_id: number
+  photo_ver: number
+  man_id: number
 }
