@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Col, Container, Row, Stack } from 'react-bootstrap'
+import { Badge, Card, Col, Container, Row, Stack } from 'react-bootstrap'
 import { IManufacturer } from 'src/api'
 import { IProduct } from 'src/api/products/products.codecs'
 import { EngineIcon, GearboxIcon, OdometerIcon, SteeringIcon } from 'src/assets'
@@ -36,7 +36,7 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
         <Stack gap={4}>
           <Stack direction="horizontal" className="justify-content-between">
             <Stack gap={2} direction="horizontal">
-              {product.for_rent && <p className="m-0">ქირავდება</p>}
+              {product.for_rent && <Badge bg="success">ქირავდება</Badge>}
               <p className="text-black-800 fw-500 m-0">{cardTitle}</p>
               <p className="m-0">{`${product.prod_year} წ`}</p>
             </Stack>
@@ -101,25 +101,31 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
               direction="horizontal"
               className="justify-content-end align-items-center w-100"
             >
-              <p className="font-size-20 m-0 text-black">
-                {currency === 1
-                  ? product.price_usd.toLocaleString()
-                  : product.price_value.toLocaleString()}
-              </p>
-              <div
-                style={{
-                  width: '26px',
-                  height: '26px',
-                  borderRadius: '50%',
-                  backgroundColor: '#F2F3F6',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: '500',
-                }}
-              >
-                {currency === 1 ? '$' : '₾'}
-              </div>
+              {product.price === 0 ? (
+                <p className="font-size-13">ფასი შეთანხმებით</p>
+              ) : (
+                <>
+                  <p className="font-size-20 m-0 text-black">
+                    {currency === 1
+                      ? product.price_usd.toLocaleString()
+                      : product.price_value.toLocaleString()}
+                  </p>
+                  <div
+                    style={{
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '50%',
+                      backgroundColor: '#F2F3F6',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: '500',
+                    }}
+                  >
+                    {currency === 1 ? '$' : '₾'}
+                  </div>
+                </>
+              )}
             </Stack>
           </Stack>
         </Stack>
