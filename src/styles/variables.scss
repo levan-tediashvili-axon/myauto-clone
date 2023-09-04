@@ -40,5 +40,19 @@ $input-focus-box-shadow: none;
 $form-select-border-radius: 8px;
 $form-select-focus-box-shadow: none;
 
+// PAGINATION
+$pagination-bg: 'transparent';
+$pagination-color: $secondary;
+$pagination-hover-color: $primary-orange;
+$pagination-font-size: 12px;
+$pagination-focus-box-shadow: none;
+$pagination-active-bg: 'transparent';
+$pagination-border-color: 'transparent';
+$pagination-hover-border-color: 'transparent';
+$pagination-active-color: $primary-orange;
+$pagination-active-border-color: 'transparent';
+$pagination-focus-color: $primary-orange;
+$pagination-focus-bg: 'transparent';
+
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';

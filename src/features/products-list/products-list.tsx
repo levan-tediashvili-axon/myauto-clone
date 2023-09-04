@@ -8,6 +8,7 @@ import { ProductsListItem } from './products-list-item'
 import { getManufacturers } from 'src/api'
 import { getCategories } from 'src/api/categories/categories.api'
 import { SortOptions } from './sort-options'
+import { Pagination } from 'src/components/pagination'
 
 const breadcrumbItems = [
   { id: '1', name: 'მთავარი', href: '/' },
@@ -55,7 +56,7 @@ export const ProductsList = () => {
         className="position-relative align-items-start gap-20px"
       >
         <FilterForm manufacturers={manufacturers} categories={categories} />
-        <Stack gap={3}>
+        <Stack gap={3} className="align-items-center">
           <SortOptions total={products.meta.total} />
           <Stack
             className={`gap-10px ${
@@ -75,6 +76,12 @@ export const ProductsList = () => {
               )
             })}
           </Stack>
+          <Pagination
+            total={products.meta.total}
+            perPage={products.meta.per_page}
+            currentPage={products.meta.current_page}
+            lastPage={products.meta.last_page}
+          />
         </Stack>
       </Stack>
     </Layout>
