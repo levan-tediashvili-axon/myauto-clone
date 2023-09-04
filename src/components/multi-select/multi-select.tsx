@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import { Dropdown, Form, Stack } from 'react-bootstrap'
 
 type Props<T> = {
@@ -28,9 +28,7 @@ export const MultiSelect = <T,>({
   onClear,
   identifier,
 }: Props<T>) => {
-  const dropdownRef = useRef(null)
-
-  // TODO. trigger dropdown programaticallu
+  const [show, setShow] = useState(false)
 
   const getCheckedBoolean = (option: T) => {
     if (Array.isArray(value)) {
@@ -60,7 +58,12 @@ export const MultiSelect = <T,>({
     : value !== null
 
   return (
-    <Dropdown autoClose="outside" ref={dropdownRef} className="w-100">
+    <Dropdown
+      autoClose="outside"
+      className="w-100"
+      onToggle={() => setShow(!show)}
+      show={show}
+    >
       <Dropdown.ItemText className="font-size-12 mb-2">
         {label}
       </Dropdown.ItemText>
@@ -119,7 +122,7 @@ export const MultiSelect = <T,>({
             </span>
             <span
               className="btn btn-primary btn-small font-size-12 fw-400"
-              onClick={() => console.log('TODO. close dropdown')}
+              onClick={() => setShow(false)}
             >
               არჩევა
             </span>
