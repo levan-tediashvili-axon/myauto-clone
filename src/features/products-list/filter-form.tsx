@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Button, ButtonGroup, Form, Stack } from 'react-bootstrap'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
@@ -12,6 +12,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getProducts } from 'src/api/products/products.api'
 import { getFilterInputSearchParams } from 'src/utils/get-search-params-object'
+import { useDebounce } from 'react-use'
 
 type ICurrency = {
   label: 'GEL' | 'USD'
@@ -60,11 +61,18 @@ export const FilterForm = ({ manufacturers, categories }: Props) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_searchParams, setSearchParams] = useSearchParams()
+  const [queryString, setQueryString] = useState('')
   const values = watch()
 
-  const queryString = new URLSearchParams(
-    getFilterInputSearchParams(values),
-  ).toString()
+  useDebounce(
+    () => {
+      setQueryString(
+        new URLSearchParams(getFilterInputSearchParams(values)).toString(),
+      )
+    },
+    700,
+    [values],
+  )
 
   const $products = useQuery({
     queryKey: ['products', queryString],
