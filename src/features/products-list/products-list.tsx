@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Stack } from 'react-bootstrap'
+import { Spinner, Stack } from 'react-bootstrap'
 import { FilterForm } from './filter-form'
 import { getProducts } from 'src/api/products/products.api'
 import { Layout } from 'src/components/layout/layout'
@@ -36,6 +36,22 @@ export const ProductsList = () => {
     queryFn: () => getProducts(queryString),
     keepPreviousData: true,
   })
+
+  if ($manufacturers.isLoading || $categories.isLoading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100vh',
+        }}
+      >
+        <Spinner animation="grow" variant="primary" />
+      </div>
+    )
+  }
 
   if (
     $products.data === undefined ||

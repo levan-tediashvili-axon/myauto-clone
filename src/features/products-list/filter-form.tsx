@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getProducts } from 'src/api/products/products.api'
 import { getFilterInputSearchParams } from 'src/utils/get-search-params-object'
 import { useDebounce } from 'react-use'
+import { useCurrencyContext } from 'src/contexts'
 
 type ICurrency = {
   label: 'GEL' | 'USD'
@@ -35,6 +36,7 @@ export type FilterInputs = {
 }
 const gel = { label: 'GEL', id: 3 } as ICurrency
 const usd = { label: 'USD', id: 1 } as ICurrency
+
 const bargainTypes = [
   { label: 'იყიდება', type: 0 },
   { label: 'ქირავდება', type: 1 },
@@ -61,6 +63,7 @@ export const FilterForm = ({ manufacturers, categories }: Props) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_searchParams, setSearchParams] = useSearchParams()
+  const { switchCurrency } = useCurrencyContext()
   const [queryString, setQueryString] = useState('')
   const values = watch()
 
@@ -225,6 +228,7 @@ export const FilterForm = ({ manufacturers, categories }: Props) => {
               } else {
                 setValue('currency', gel)
               }
+              switchCurrency()
             }}
             label={
               <Stack>

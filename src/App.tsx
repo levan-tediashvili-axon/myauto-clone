@@ -1,9 +1,10 @@
 import { ProductsList, Home } from './features'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
 import './styles/App.scss'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { CurrencyProvider } from './contexts'
+
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -20,8 +21,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <CurrencyProvider>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </CurrencyProvider>
     </QueryClientProvider>
   )
 }

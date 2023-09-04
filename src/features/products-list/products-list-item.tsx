@@ -4,6 +4,7 @@ import { IManufacturer } from 'src/api'
 import { IProduct } from 'src/api/products/products.codecs'
 import { EngineIcon, GearboxIcon, OdometerIcon, SteeringIcon } from 'src/assets'
 import { CustomsBadge } from 'src/components'
+import { useCurrencyContext } from 'src/contexts'
 import { getFuelType } from 'src/utils/get-fuel-type'
 import { getLocation } from 'src/utils/get-location'
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 }
 export const ProductsListItem = ({ product, manufacturer }: Props) => {
   const cardTitle = `${manufacturer?.man_name || ''} ${product.car_model}`
+  const { currency } = useCurrencyContext()
   return (
     <Card className="bg-white w-100 p-3">
       <Stack direction="horizontal" gap={3}>
@@ -31,7 +33,7 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
             width="100%"
           />
         </div>
-        <Stack>
+        <Stack gap={4}>
           <Stack direction="horizontal" className="justify-content-between">
             <Stack gap={2} direction="horizontal">
               {product.for_rent && <p className="m-0">ქირავდება</p>}
@@ -45,7 +47,7 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
               </p>
             </Stack>
           </Stack>
-          <Stack direction="horizontal">
+          <Stack direction="horizontal" className="justify-content-between">
             <Container className="mw-400">
               <Row className="mb-3">
                 <Col>
@@ -94,8 +96,30 @@ export const ProductsListItem = ({ product, manufacturer }: Props) => {
                 </Col>
               </Row>
             </Container>
-            <Stack>
-              <p>{product.price_usd}</p>
+            <Stack
+              gap={1}
+              direction="horizontal"
+              className="justify-content-end align-items-center w-100"
+            >
+              <p className="font-size-20 m-0 text-black">
+                {currency === 1
+                  ? product.price_usd.toLocaleString()
+                  : product.price_value.toLocaleString()}
+              </p>
+              <div
+                style={{
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '50%',
+                  backgroundColor: '#F2F3F6',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: '500',
+                }}
+              >
+                {currency === 1 ? '$' : '₾'}
+              </div>
             </Stack>
           </Stack>
         </Stack>
